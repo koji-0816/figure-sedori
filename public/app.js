@@ -3,6 +3,7 @@ const searchBtn = document.getElementById("searchBtn");
 const statusEl = document.getElementById("status");
 const resultArea = document.getElementById("resultArea");
 const rowTemplate = document.getElementById("rowTemplate");
+const candidateTemplate = document.getElementById("candidateTemplate");
 
 const yen = (n) => `${Math.round(n).toLocaleString("ja-JP")}円`;
 
@@ -23,6 +24,7 @@ function buildTable(items) {
         <th>現在価格</th>
         <th>送料</th>
         <th>残り時間</th>
+        <th>AI確認</th>
         <th>買取価格（手入力）</th>
         <th>見込価格</th>
         <th>判定</th>
@@ -89,10 +91,68 @@ function buildTable(items) {
 
     buybackInput.addEventListener("input", recalc);
 
+    const aiBtn = row.querySelector(".aiBtn");
+    const aiRow = row.querySelector(".aiRow");
+    const aiResultCell = row.querySelector(".aiResult");
+
+    aiBtn.addEventListener("click", () => runIdentify(item, aiBtn, aiRow, aiResultCell));
+
     tbody.appendChild(row);
   }
 
   resultArea.appendChild(table);
+}
+
+function renderCandidateCard(candidate) {
+  const card = candidateTemplate.content.cloneNode(true);
+  card.querySelector(".candidateLabel").textContent = candidate.label || "商品候補";
+  card.querySelector(".c-work").textContent = candidate.work || "-";
+  card.querySelector(".c-character").textContent = candidate.character || "-";
+  card.querySelector(".c-maker").textContent = candidate.maker || "-";
+  card.querySelector(".c-series").textContent = candidate.series || "-";
+  card.querySelector(".c-grade").textContent = candidate.grade || "-";
+  card.querySelector(".c-keyword").textContent = candidate.keyword || "-";
+  card.querySelector(".c-confidence").textContent = candidate.confidence || "-";
+  card.querySelector(".c-caveats").textContent = candidate.caveats || "-";
+  return card;
+}
+
+async function runIdentify(item, aiBtn, aiRow, aiResultCell) {
+  aiBtn.disabled = true;
+  aiBtn.textContent = "解析中…";
+  aiRow.hidden = false;
+  aiResultCell.innerHTML = "<p class='note'>AIが画像を確認しています…</p>";
+
+  try {
+    const res = await fetch("/api/identify", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ imageUrl: item.image, title: item.title }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "識別に失敗しました");
+    }
+
+    aiResultCell.innerHTML = "";
+    const wrapper = document.createElement("div");
+    wrapper.className = "candidateWrapper";
+    for (const candidate of data.items || []) {
+      wrapper.appendChild(renderCandidateCard(candidate));
+    }
+    if (data.unclear) {
+      const unclearEl = document.createElement("p");
+      unclearEl.className = "note warn";
+      unclearEl.textContent = `不明: ${data.unclear}`;
+      wrapper.appendChild(unclearEl);
+    }
+    aiResultCell.appendChild(wrapper);
+  } catch (err) {
+    aiResultCell.innerHTML = `<p class="note warn">${err.message}</p>`;
+  } finally {
+    aiBtn.disabled = false;
+    aiBtn.textContent = "AI確認";
+  }
 }
 
 async function runSearch() {

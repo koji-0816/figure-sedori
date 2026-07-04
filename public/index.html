@@ -27,10 +27,30 @@
     <td class="col-price"></td>
     <td class="col-postage"></td>
     <td class="col-time"></td>
+    <td class="col-ai"><button class="aiBtn">AI確認</button></td>
     <td class="col-buyback"><input type="number" class="buybackInput" placeholder="買取価格" min="0" /></td>
     <td class="col-estimate"></td>
     <td class="col-judge"></td>
   </tr>
+  <tr class="aiRow" hidden>
+    <td colspan="9" class="aiResult"></td>
+  </tr>
+</template>
+
+<template id="candidateTemplate">
+  <div class="candidateCard">
+    <div class="candidateLabel"></div>
+    <dl>
+      <dt>作品名</dt><dd class="c-work"></dd>
+      <dt>キャラ名</dt><dd class="c-character"></dd>
+      <dt>メーカー</dt><dd class="c-maker"></dd>
+      <dt>シリーズ</dt><dd class="c-series"></dd>
+      <dt>賞/版</dt><dd class="c-grade"></dd>
+      <dt>検索キーワード</dt><dd class="c-keyword"></dd>
+      <dt>確度</dt><dd class="c-confidence"></dd>
+      <dt>要確認ポイント</dt><dd class="c-caveats"></dd>
+    </dl>
+  </div>
 </template>
 
 <script src="/app.js"></script>

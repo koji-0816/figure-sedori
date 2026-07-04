@@ -118,3 +118,59 @@ th {
 tr.profit-row {
   background: #eafaf0;
 }
+
+.aiBtn {
+  padding: 4px 10px;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #1a4d8f;
+  color: #1a4d8f;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.aiBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.aiResult {
+  background: #fafbfc;
+}
+
+.candidateWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.candidateCard {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px 14px;
+  min-width: 260px;
+}
+
+.candidateLabel {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1a4d8f;
+}
+
+.candidateCard dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 2px 8px;
+  font-size: 12px;
+}
+
+.candidateCard dt {
+  color: #888;
+}
+
+.candidateCard dd {
+  margin: 0;
+}
