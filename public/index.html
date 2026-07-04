@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>フィギュアせどり判定プロトタイプ</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <h1>フィギュアせどり判定プロトタイプ</h1>
+  <p class="note">ヤフオク検索結果を自動取得し、買取価格を入力すると利益見込みを自動判定します。</p>
+</header>
+
+<section class="search-bar">
+  <input type="text" id="keyword" placeholder="例: 一番くじ ワンピース" />
+  <button id="searchBtn">検索</button>
+  <span id="status"></span>
+</section>
+
+<section id="resultArea"></section>
+
+<template id="rowTemplate">
+  <tr>
+    <td class="col-image"><img class="thumb" /></td>
+    <td class="col-title"><a class="titleLink" target="_blank" rel="noopener"></a></td>
+    <td class="col-price"></td>
+    <td class="col-postage"></td>
+    <td class="col-time"></td>
+    <td class="col-buyback"><input type="number" class="buybackInput" placeholder="買取価格" min="0" /></td>
+    <td class="col-estimate"></td>
+    <td class="col-judge"></td>
+  </tr>
+</template>
+
+<script src="/app.js"></script>
+</body>
+</html>
